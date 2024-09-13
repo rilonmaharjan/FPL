@@ -9,7 +9,7 @@ Widget appBar({String? title,bool? showback,Widget? action}){
     duration: const Duration(milliseconds: 800),
     from: -30,
     child: Container(
-      height: 110.h,
+      height: 90.h,
       margin: EdgeInsets.only(bottom: 15.h),
       width: double.infinity,
       padding: EdgeInsets.only(bottom:4.0.sp),

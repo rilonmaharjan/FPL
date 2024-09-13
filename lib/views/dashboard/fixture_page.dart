@@ -47,7 +47,7 @@ class _FixturePageState extends State<FixturePage> {
           children: [
             StickyHeader(
               header: appBar(
-                title: "Matches"
+                title: "Premiere League Fixtures"
               ),
               content: Obx(() =>
                 matchCon.isLoading.isTrue 
@@ -151,11 +151,10 @@ class _FixturePageState extends State<FixturePage> {
           enableInfiniteScroll: false,
           initialPage: matchCon.currentGw - 1,
           enlargeCenterPage: true, 
-          
           onPageChanged: (index, reason) {
-            // setState(() {
-            //   matchCon.currentGw = matchCon.currentGw + 1;
-            // });
+            setState(() {
+              matchCon.currentGw = index+1;
+            });
           },
         )
       ),
@@ -177,83 +176,199 @@ class _FixturePageState extends State<FixturePage> {
             style: interSemiBold(size: 16.sp,color: dark),
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(bottom: 7.h),
-          padding: EdgeInsets.symmetric(vertical: 8.h,horizontal: 8.w),
-          decoration: BoxDecoration(
-            color: tileGrey,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 154.w,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 100.w,
-                      child: Text(firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamH).name.toString(), style: interSemiBold(size: 14.sp, color: dark), textAlign: TextAlign.end, overflow: TextOverflow.ellipsis, maxLines: 1,)),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Image.network("https://resources.premierleague.com/premierleague/badges/t${firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamH).code}.png",
-                      loadingBuilder: (context, child, loadingProgress) => loadingProgress==null ? child : const TeamImageShimmerWidget(),
-                      errorBuilder: (context, error, stackTrace) => Image.asset("assets/logo.png",height: 80,width: 60,color: Colors.grey, colorBlendMode: BlendMode.darken,),
-                      height: 30.h,
-                      width: 30.h,
-                    ),
-                    SizedBox(width: 10.w,)
-                  ],
+        InkWell(
+          onTap: seconddata[index].teamHScore == -1 && seconddata[index].teamAScore == -1
+            ? (){}
+            : () {
+              showbottomsheet(firstdata, seconddata, index);
+            },
+          child: Container(
+            margin: EdgeInsets.only(bottom: 7.h),
+            padding: EdgeInsets.symmetric(vertical: 8.h,horizontal: 8.w),
+            decoration: BoxDecoration(
+              color: tileGrey,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 154.w,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 100.w,
+                        child: Text(firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamH).name.toString(), style: interSemiBold(size: 14.sp, color: dark), textAlign: TextAlign.end, overflow: TextOverflow.ellipsis, maxLines: 1,)),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Image.network("https://resources.premierleague.com/premierleague/badges/t${firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamH).code}.png",
+                        loadingBuilder: (context, child, loadingProgress) => loadingProgress==null ? child : const TeamImageShimmerWidget(),
+                        errorBuilder: (context, error, stackTrace) => Image.asset("assets/logo.png",height: 80,width: 60,color: Colors.grey, colorBlendMode: BlendMode.darken,),
+                        height: 30.h,
+                        width: 30.h,
+                      ),
+                      SizedBox(width: 10.w,)
+                    ],
+                  ),
                 ),
-              ),
-              seconddata[index].teamHScore == -1 && seconddata[index].teamAScore == -1
-              ? SizedBox(
-                height: 30.h,
-                width: 59.w,
-                child: Center(
-                  child: Text(DateFormat.jm().format(seconddata[index].kickoffTime.toLocal()),style: interMedium(size: 12.sp, color: dark), )
+                seconddata[index].teamHScore == -1 && seconddata[index].teamAScore == -1
+                ? SizedBox(
+                  height: 30.h,
+                  width: 59.w,
+                  child: Center(
+                    child: Text(DateFormat.jm().format(seconddata[index].kickoffTime.toLocal()),style: interMedium(size: 12.sp, color: dark), )
+                  ),
+                )
+                : Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 224, 224, 224),
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  height: 30.h,
+                  width: 59.w,
+                  child: Center(
+                    child: Text("${seconddata[index].teamHScore} - ${seconddata[index].teamAScore}",style: interSemiBold(size: 16.sp, color: dark), )
+                  ) 
                 ),
-              )
-              : Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 224, 224, 224),
-                  borderRadius: BorderRadius.circular(30.r),
+                SizedBox(
+                  width: 146.w,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Image.network("https://resources.premierleague.com/premierleague/badges/t${firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamA).code}.png",
+                        loadingBuilder: (context, child, loadingProgress) => loadingProgress==null ? child : const TeamImageShimmerWidget(),
+                        errorBuilder: (context, error, stackTrace) => Image.asset("assets/logo.png",height: 80,width: 60,color: Colors.grey, colorBlendMode: BlendMode.darken,),
+                        height: 30.h,
+                        width: 30.h,
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      SizedBox(
+                        width: 96.w,
+                        child: Text(firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamA).name.toString(), style: interSemiBold(size: 14.sp, color: dark), maxLines: 1, overflow: TextOverflow.ellipsis,)
+                      ),
+                    ],
+                  ),
                 ),
-                height: 30.h,
-                width: 59.w,
-                child: Center(
-                  child: Text("${seconddata[index].teamHScore} - ${seconddata[index].teamAScore}",style: interSemiBold(size: 16.sp, color: dark), )
-                ) 
-              ),
-              SizedBox(
-                width: 146.w,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Image.network("https://resources.premierleague.com/premierleague/badges/t${firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamA).code}.png",
-                      loadingBuilder: (context, child, loadingProgress) => loadingProgress==null ? child : const TeamImageShimmerWidget(),
-                      errorBuilder: (context, error, stackTrace) => Image.asset("assets/logo.png",height: 80,width: 60,color: Colors.grey, colorBlendMode: BlendMode.darken,),
-                      height: 30.h,
-                      width: 30.h,
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    SizedBox(
-                      width: 96.w,
-                      child: Text(firstdata.teams!.firstWhere((element) => element.id == seconddata[index].teamA).name.toString(), style: interSemiBold(size: 14.sp, color: dark), maxLines: 1, overflow: TextOverflow.ellipsis,)
-                    ),
-                  ],
-                ),
-              ),
-              
-            ],
+                
+              ],
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  showbottomsheet(BootStrapModel firstdata, List<FixtureModel> seconddata, index) {
+    showModalBottomSheet(
+      context: context, 
+      elevation: 5,
+      isScrollControlled: true,
+      useSafeArea: false,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+      builder: (context) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.r),
+                topRight: Radius.circular(20.r),
+              ),
+              gradient: const LinearGradient(
+                colors: [
+                  purple,
+                  purple3, 
+                ],
+              ),
+            ),
+            padding: EdgeInsets.symmetric(vertical : 15.h, horizontal: 10.w),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10.sp),
+                  width: 100.w,
+                  height: 3.h,
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(20.r)
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: seconddata[index].stats.length,
+                  itemBuilder: (context, statsindex) => Column(
+                    children: [
+                      seconddata[index].stats[statsindex].a.isNotEmpty || seconddata[index].stats[statsindex].h.isNotEmpty
+                        ? Visibility(
+                            visible: seconddata[index].stats[statsindex].identifier != "bps" && seconddata[index].stats[statsindex].identifier != "bonus",
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(vertical: 8.sp),
+                              margin: EdgeInsets.only(top: 9.0.h,bottom: 5.0.h),
+                              decoration: BoxDecoration(
+                                color: white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(10.r)
+                              ),
+                              child: Text(seconddata[index].stats[statsindex].identifier.replaceAll(RegExp(r'_'), ' ').toUpperCase(), style: interSemiBold(size: 14.sp, color: tileGrey))
+                            ),
+                         )
+                        : const SizedBox(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40.w),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: List.generate(
+                                  seconddata[index].stats[statsindex].identifier == "bps" || seconddata[index].stats[statsindex].identifier == "bonus"
+                                    ? 0
+                                    : seconddata[index].stats[statsindex].h.length, (hindex) => 
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 2.0.sp),
+                                        child: Text("${firstdata.elements!.firstWhere((element) => element.id == seconddata[index].stats[statsindex].h[hindex].element).webName}${seconddata[index].stats[statsindex].h[hindex].value == 1 ? "" : "(${seconddata[index].stats[statsindex].h[hindex].value.toString()})"}", style: interRegular(size: 14.sp, color :bgGrey) ),
+                                      )
+                                )
+                              )
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: List.generate(
+                                  seconddata[index].stats[statsindex].identifier == "bps" || seconddata[index].stats[statsindex].identifier == "bonus" 
+                                    ? 0
+                                    : seconddata[index].stats[statsindex].a.length , (aindex) => 
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 2.0.sp),
+                                        child: Text("${firstdata.elements!.firstWhere((element) => element.id==seconddata[index].stats[statsindex].a[aindex].element ).webName}${seconddata[index].stats[statsindex].a[aindex].value == 1 ? "" : "(${seconddata[index].stats[statsindex].a[aindex].value})"}", style: interRegular(size: 14.sp, color :bgGrey) ),
+                                      )
+                                )
+                              )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }, 
     );
   }
 }
