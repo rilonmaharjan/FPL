@@ -58,7 +58,6 @@ class MatchController extends GetxController{
           .where((element) => element.event == currentGw)
           .length;
         stopLoading();
-      return matchList;
       }
     } catch (e) {
       showToast(isSuccess: false,message: e.toString(),);

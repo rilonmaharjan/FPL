@@ -104,8 +104,8 @@ class ImageShimmerWidget extends StatelessWidget {
       highlightColor: gray1,
       period: const Duration(milliseconds: 1000),
       child: SizedBox(
-        height: 80,
-        width: 60,
+        height: 65.h,
+        width: 40.w,
         child: Image.asset("assets/images/dummy.png"),
       ),
     );

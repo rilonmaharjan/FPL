@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-Widget appBar({String? title,bool? showback,Widget? action}){
+Widget appBar({String? title,bool? showback,Widget? action, double? radius, double? marginBottom}){
   return FadeInUp(
     duration: const Duration(milliseconds: 800),
     from: -30,
     child: Container(
       height: 90.h,
-      margin: EdgeInsets.only(bottom: 15.h),
+      margin: EdgeInsets.only(bottom: marginBottom ?? 15.h),
       width: double.infinity,
       padding: EdgeInsets.only(bottom:4.0.sp),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
           colors: [
             purple,
             purple3, 
           ],
         ),
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(radius ?? 30),
+          bottomRight: Radius.circular(radius ?? 30),
         )
       ),
       child: Padding(
