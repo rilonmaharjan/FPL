@@ -3,6 +3,7 @@ import 'package:fantasypremiereleague/controller/fantasy_controller.dart';
 import 'package:fantasypremiereleague/controller/match_controller.dart';
 import 'package:fantasypremiereleague/model/bootstrap_model.dart';
 import 'package:fantasypremiereleague/model/league_model.dart';
+import 'package:fantasypremiereleague/model/live_model.dart';
 import 'package:fantasypremiereleague/widgets/appbar.dart';
 import 'package:fantasypremiereleague/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
@@ -318,9 +319,210 @@ class _PointsPageState extends State<PointsPage> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 700.h,
-                      )
+                      Padding(
+                        padding: EdgeInsets.all(15.0.sp),
+                        child: Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                //current season points
+                                fantasyCon.historyList.current.isEmpty
+                                  ? const SizedBox()
+                                  : Column(
+                                    children: [
+                                      SizedBox(height: 10.0.h,),
+                                      Text("CURRENT SEASON", style: interMedium(size: 16.sp, color: dark),),
+                                      SizedBox(height: 15.0.h,),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DataTable(
+                                          border: TableBorder.all(
+                                            color: dark.withOpacity(0.3),
+                                            width: 1.sp
+                                          ),
+                                          headingRowColor: WidgetStatePropertyAll(white.withOpacity(0.3)),
+                                          headingRowHeight: 40,
+                                          // ignore: deprecated_member_use
+                                          dataRowHeight: 40,
+                                          columns: <DataColumn>[
+                                            DataColumn(
+                                              tooltip: "Gameweek",
+                                              label: Expanded(
+                                                child: Text("GW", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              tooltip: "Points",
+                                              label: Expanded(
+                                                child: Text("Pts", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              tooltip: "Total Points",
+                                              label: Expanded(
+                                                child: Text("T.Pts", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              tooltip: "Rank",
+                                              label: Expanded(
+                                                child: Text("Rank", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              tooltip: "Overall Rank",
+                                              label: Expanded(
+                                                child: Text("O.R", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              tooltip: "Bank",
+                                              label: Expanded(
+                                                child: Text("Bank", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              tooltip: "Team Value",
+                                              label: Expanded(
+                                                child: Text("T.V", style: interBold(size :14.sp,color : dark))
+                                              ),
+                                            ),
+                                          ],
+                                          rows: <DataRow>[
+                                            ...List.generate(fantasyCon.historyList.current.length, (index) =>
+                                              DataRow(
+                                                cells: <DataCell>[
+                                                  DataCell(Text(fantasyCon.historyList.current[index]['event'].toString(), style: interMedium(size: 12.sp,color: dark),)),
+                                                  DataCell(Text(fantasyCon.historyList.current[index]['points'].toString(), style: interMedium(size: 12.sp,color: dark))),
+                                                  DataCell(Text(fantasyCon.historyList.current[index]['total_points'].toString(), style: interMedium(size: 12.sp,color: dark))),
+                                                  DataCell(Text(fantasyCon.historyList.current[index]['rank'] ==null ? "---" : fantasyCon.historyList.current[index]['rank'].toString(), style: interMedium(size: 12.sp,color: dark),)),
+                                                  DataCell(Text(fantasyCon.historyList.current[index]['overall_rank'].toString(), style: interMedium(size: 12.sp,color: dark))),
+                                                  DataCell(Text(addDecimal(fantasyCon.historyList.current[index]['bank'].toString()), style: interMedium(size: 12.sp,color: dark))),
+                                                  DataCell(Text(addDecimal(fantasyCon.historyList.current[index]['value'].toString()), style: interMedium(size: 12.sp,color: dark))),
+                                                ],
+                                              )
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                //history points
+                                fantasyCon.historyList.past.isEmpty
+                                  ? const SizedBox()
+                                  : Column(
+                                    children: [
+                                      SizedBox(height: 30.h,),
+                                      Text("Past Season".toUpperCase(), style: interMedium(size: 16.sp,color: dark),),
+                                      SizedBox(height: 15.0.h,),
+                                      Table(
+                                        border: TableBorder.all(
+                                          color: dark.withOpacity(0.3),
+                                          width: 1.sp
+                                        ),
+                                        children: <TableRow>[
+                                          TableRow(
+                                            children: [
+                                              Container(
+                                                color: white.withOpacity(0.3),
+                                                padding:  EdgeInsets.all(12.sp),
+                                                child: Text("Season", style: interBold(size: 14.sp,color:dark))
+                                              ),
+                                              Container(
+                                                color: white.withOpacity(0.3),
+                                                padding: const EdgeInsets.all(12),
+                                                child: Text("Total Points", style: interBold(size: 14.sp,color:dark))
+                                              ),
+                                              Container(
+                                                color: white.withOpacity(0.3),
+                                                padding: const EdgeInsets.all(12),
+                                                child: Text("Rank", style: interBold(size: 14.sp,color:dark))
+                                              ),
+                                            ]
+                                          ),
+                                          ...List.generate(fantasyCon.historyList.past.length, (index) =>
+                                            TableRow(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(12.sp),
+                                                  child: Text(fantasyCon.historyList.past[index].seasonName, style: interMedium(size:12.sp, color :dark),)
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.all(12.sp),
+                                                  child: Text(fantasyCon.historyList.past[index].totalPoints.toString(), style: interMedium(size:12.sp, color :dark),)
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.all(12.sp),
+                                                  child: Text(fantasyCon.historyList.past[index].rank.toString(), style: interMedium(size:12.sp, color :dark),)
+                                                ),
+                                              ]
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  )
+                              ],
+                            ),
+                            //transfers
+                            fantasyCon.transferList.isEmpty
+                              ? const SizedBox()
+                              : Column(
+                                children: [
+                                  SizedBox(height: 30.h,),
+                                  Text("Gameweek ${widget.gw} Transfers".toUpperCase(), style: interMedium(size: 16.sp,color: dark),),
+                                  SizedBox(height: 15.h,),
+                                  Table(
+                                    border: TableBorder.all(
+                                      color: dark.withOpacity(0.3),
+                                      width: 1.sp
+                                    ),
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          Container(
+                                            color: white.withOpacity(0.3),
+                                            padding: EdgeInsets.all(12.sp),
+                                            child: Center(child: Text("IN", style: interBold(size: 14.sp,color:dark)))
+                                          ),
+                                          Container(
+                                            color: white.withOpacity(0.3),
+                                            padding: const EdgeInsets.all(12),
+                                            child: Center(child: Text("OUT", style: interBold(size: 14.sp,color:dark)))
+                                          ),
+                                        ]
+                                      ),
+                                      ...List.generate(fantasyCon.transferList.length, (index) =>
+                                        TableRow(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(12),
+                                              child: Center(
+                                                child: Text(
+                                                  matchCon.bootstrapList.elements!.firstWhere((element) => element.id!.toInt()==fantasyCon.transferList[index].elementIn ).webName.toString(), 
+                                                  style: interMedium(size: 12.sp, color: dark)),
+                                              )
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.all(12),
+                                              child: Center(
+                                                child: Text(
+                                                  matchCon.bootstrapList.elements!.firstWhere((element) => element.id!.toInt()==fantasyCon.transferList[index].elementOut).webName.toString(), 
+                                                  style: interMedium(size: 12.sp, color: dark)),
+                                              )
+                                            ),
+                                          ]
+                                        )
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.0.h,)
                     ],
                   ),
               )
@@ -334,7 +536,7 @@ class _PointsPageState extends State<PointsPage> {
   _buildPlayerContainer(imgCode, name, points, int elementId) {
     return GestureDetector(
       onTap: () {
-        // showbottomsheet(elementId);
+        showbottomsheet(elementId);
       },
       child: SizedBox(
         width: 68.w,
@@ -364,7 +566,7 @@ class _PointsPageState extends State<PointsPage> {
                     child:Center(child: Text("$name",style: interMedium(size: 10.sp, color: white),maxLines: 1, overflow: TextOverflow.ellipsis, )),
                   ),
                   Container(
-                    width: 70,
+                    width: 70.w,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight: Radius.circular(8)),
                       color: Color.fromARGB(255, 212, 212, 212),
@@ -389,5 +591,100 @@ class _PointsPageState extends State<PointsPage> {
         ),
       ),
     );
+  }
+
+  showbottomsheet(int elementId) {
+    List<Stat> stats = [];
+      stats = fantasyCon.liveList.elements.firstWhere((element) => element.id == elementId).explain[0].stats;
+    showModalBottomSheet(
+      context: context, 
+      elevation: 5,
+      isScrollControlled: true,
+      useSafeArea: false,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+      builder: (context) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.r),
+                topRight: Radius.circular(20.r),
+              ),
+              gradient: const LinearGradient(
+                colors: [
+                  purple,
+                  purple3, 
+                ],
+              ),
+            ),
+            padding: EdgeInsets.all(15.sp),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10.sp),
+                  width: 100,
+                  height: 3,
+                  color: white,
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Table(
+                  border: TableBorder.all(color: white, width: 1.5.sp),
+                  children: <TableRow>[
+                    TableRow(
+                      children:[
+                        Container(
+                          color: white.withOpacity(0.3),
+                          padding: EdgeInsets.all(12.sp),
+                          child: Text("Statistics".toUpperCase(), style: interBold(size: 16.sp, color: white))
+                        ),
+                        Container(
+                          color: white.withOpacity(0.3),
+                          padding: EdgeInsets.all(12.sp),
+                          child: Text("Points".toUpperCase(), style: interBold(size: 16.sp, color: white))
+                        ),
+                      ]
+                    ),
+                    ...List.generate(stats.length, (index) =>
+                      TableRow(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(12.sp),
+                            child: Text(
+                              stats[index].identifier.toUpperCase().replaceAll(RegExp(r'_'), ' '),
+                              style: interRegular(size: 14.sp,color: white))
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(12.sp),
+                            child: Text(
+                              stats[index].points.toString(),
+                              style: interRegular(size: 16.sp,color: white))
+                          ),
+                        ]
+                      )
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+              ],
+            ),
+          ),
+        );
+      }, 
+    );
+  }
+
+  String addDecimal (str) {
+    String originalNumberString = str;
+    double originalNumber = double.parse(originalNumberString);
+
+    double formattedNumber = originalNumber / 10;
+
+    return formattedNumber.toStringAsFixed(1);
   }
 }
