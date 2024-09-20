@@ -2,11 +2,11 @@
 import 'package:fantasypremiereleague/constant/styles.dart';
 import 'package:fantasypremiereleague/views/dashboard/fantasy_page.dart';
 import 'package:fantasypremiereleague/views/dashboard/fixture_page.dart';
+import 'package:fantasypremiereleague/views/dashboard/web_view.dart';
 import 'package:fantasypremiereleague/widgets/fade.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class Dashboard extends StatefulWidget {
   final int index;
@@ -17,13 +17,13 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMixin {
-
   late AnimationController _controller;
   Duration animationDuration = const Duration(milliseconds: 250);
 
   List<Widget> pages = [
     const FixturePage(),
     const FantasyPage(),
+    const WebViewWidget(),
   ];
 
   int selectedIndex = 0;
@@ -111,8 +111,9 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(width: 5.0.w,),
-                    buildNavItem(Icons.sports_football, 'Matches', 0, 140.0,),
-                    buildNavItem(Icons.stadium, 'Fantasy', 1, 140.0),
+                    buildNavItem(Icons.sports_soccer_outlined, 'Matches', 0, 93.0,),
+                    buildNavItem(Icons.stadium, 'Fantasy', 1, 93.0),
+                    buildNavItem(Icons.games_outlined, 'My Team', 2, 93.0),
                     SizedBox(width: 5.0.w,),
                   ],
                 ),
